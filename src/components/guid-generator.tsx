@@ -86,9 +86,17 @@ const useStyles = makeStyles({
     });
   }
 
-  private handleChange(arg0: string): void {
-    console.log('foo');
-  }
+
+//   private handleChange(event: React.FormEvent<HTMLSelectElement>) {
+//     // No longer need to cast to any - hooray for react!
+//     var safeSearchTypeValue: string = event.currentTarget.value;
+
+//     console.log(safeSearchTypeValue); // in chrome => B
+
+//     // this.setState({
+//     //     selectedValue: safeSearchTypeValue
+//     // });
+// }
 
   private generateOneGuid():string{
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -96,6 +104,11 @@ const useStyles = makeStyles({
       return v.toString(16);
     });
   }
+
+  onChange = (e: React.ChangeEvent<HTMLInputElement>)=> {
+    debugger;
+    const newValue = e.target.value;
+ }
 
   // render will know everything!
   render() {
@@ -106,7 +119,8 @@ const useStyles = makeStyles({
         <Input
           id="adornment-weight"
           value={this.state.count}
-          // onChange={this.handleChange('weight')}
+          onChange={this.onChange.bind(this)}
+          // onChange={(e, sender) => this.onChange(e, sender)}
           endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
           aria-describedby="weight-helper-text"
           inputProps={{
@@ -119,6 +133,13 @@ const useStyles = makeStyles({
     </div>
     
   }
+
+//   onChange = (e: React.FormEvent<HTMLInputElement>) => {
+//     const newValue = e.currentTarget.value;
+// }
+  //  handleChange(): ((event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void) | undefined {
+  //    console.log("foo");
+  //  }
 
 }
 
