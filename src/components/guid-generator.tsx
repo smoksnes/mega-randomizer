@@ -1,6 +1,6 @@
  import React, { Component } from 'react'; // let's also import Component
  import Button from '@material-ui/core/Button';
-import { FormControl, Input, FormHelperText } from '@material-ui/core';
+import { FormControl, Input, FormHelperText, List, ListItem, ListItemText } from '@material-ui/core';
 
 import clsx from 'clsx';
 import { makeStyles, Theme, withStyles, createStyles } from '@material-ui/core/styles';
@@ -123,14 +123,15 @@ const useStyles = makeStyles({
   // render will know everything!
   render() {
     const items = this.state.guids.map((item) =>
-        <li>{item}</li>
-    );
+                <ListItem>
+                  <ListItemText
+                    primary={item}
+                  />
+                </ListItem>
+      );
     // const classes = useStyles();
     return <div>
-      <ul>
-        {items}
-      </ul>
-        
+    
         <FormControl >
         <Input
           id="adornment-weight"
@@ -146,6 +147,10 @@ const useStyles = makeStyles({
         <FormHelperText id="weight-helper-text">Number of guids</FormHelperText>
       </FormControl>
         <Button onClick={() => { this.generateGuidsAndSetState(); }} variant="outlined" color="primary">Create</Button>
+
+        <List>
+              {items}
+            </List>   
     </div>
     
   }
