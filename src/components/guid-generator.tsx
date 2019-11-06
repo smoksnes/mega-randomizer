@@ -18,9 +18,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 // the clock's state has one field: The current time, based upon the
 // JavaScript class Date
 
-type GuidGeneratorState ={
+type GuidGeneratorState = {
   guids:string[],
-  count:1
+  count:number
 };
 
 const useStyles = makeStyles({
@@ -49,6 +49,10 @@ const useStyles = makeStyles({
   
   constructor(props: Readonly<{}>){
     super(props);
+    this.state = {
+      count: 0, 
+      guids: new Array()
+    }
     // this.classes = props;
     // const { this.classes } = props;
   }
@@ -56,13 +60,18 @@ const useStyles = makeStyles({
 
   // Before the component mounts, we initialise our state
   componentWillMount() {
-    this.generateGuidsAndSetState(1)
+    this.setState({
+      count: 1
+    });
+    this.generateGuidsAndSetState();
     // this.setState({
     //   count: 1
     // });
   }
 
-  private generateGuid(count:Number): string[]{
+  private generateGuids(): string[]{
+    debugger;
+    const count = this.state.count;
     let list: Array<string> = new Array();
     for(var i=0; i< count; i++){
       var guid = this.generateOneGuid();
@@ -79,8 +88,8 @@ const useStyles = makeStyles({
   //   // setValues({ ...values, [prop]: event.target.value });
   // };
 
-  private generateGuidsAndSetState(count:Number) {
-    let guids = this.generateGuid(count);
+  private generateGuidsAndSetState() {
+    let guids = this.generateGuids();
     this.setState({
       guids: guids
     });
@@ -106,30 +115,37 @@ const useStyles = makeStyles({
   }
 
   onChange = (e: React.ChangeEvent<HTMLInputElement>)=> {
-    debugger;
-    const newValue = e.target.value;
+    this.setState({
+      count: Number(e.target.value)
+    });
  }
 
   // render will know everything!
   render() {
+    const items = this.state.guids.map((item) =>
+        <li>{item}</li>
+    );
     // const classes = useStyles();
     return <div>
-        <code>{this.state.guids }</code>
+      <ul>
+        {items}
+      </ul>
+        
         <FormControl >
         <Input
           id="adornment-weight"
           value={this.state.count}
           onChange={this.onChange.bind(this)}
           // onChange={(e, sender) => this.onChange(e, sender)}
-          endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
+          endAdornment={<InputAdornment position="end">guids</InputAdornment>}
           aria-describedby="weight-helper-text"
           inputProps={{
             'aria-label': 'weight',
           }}
         />
-        <FormHelperText id="weight-helper-text">Weight</FormHelperText>
+        <FormHelperText id="weight-helper-text">Number of guids</FormHelperText>
       </FormControl>
-        <Button onClick={() => { this.generateGuidsAndSetState(10); }} variant="outlined" color="primary">Create</Button>
+        <Button onClick={() => { this.generateGuidsAndSetState(); }} variant="outlined" color="primary">Create</Button>
     </div>
     
   }
