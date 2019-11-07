@@ -1,6 +1,6 @@
  import React, { Component } from 'react'; // let's also import Component
  import Button from '@material-ui/core/Button';
-import { FormControl, Input, FormHelperText, List, ListItem, ListItemText } from '@material-ui/core';
+import { FormControl, Input, FormHelperText, List, ListItem, ListItemText, Typography, Grid, Slider } from '@material-ui/core';
 
 import clsx from 'clsx';
 import { makeStyles, Theme, withStyles, createStyles } from '@material-ui/core/styles';
@@ -12,6 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 // import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import ImportExport from '@material-ui/icons/ImportExport';
 // import Visibility from '@material-ui/icons/Visibility';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -53,10 +54,7 @@ const useStyles = makeStyles({
       count: 0, 
       guids: new Array()
     }
-    // this.classes = props;
-    // const { this.classes } = props;
   }
-  // classes = useStyles();
 
   // Before the component mounts, we initialise our state
   componentWillMount() {
@@ -64,9 +62,6 @@ const useStyles = makeStyles({
       count: 1
     });
     this.generateGuidsAndSetState();
-    // this.setState({
-    //   count: 1
-    // });
   }
 
   private generateGuids(): string[]{
@@ -80,14 +75,6 @@ const useStyles = makeStyles({
     return list;
   }
 
-  // private handleChange => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log(event.target.value);
-  //   // this.setState({
-  //   //   count: event.target.value
-  //   // });
-  //   // setValues({ ...values, [prop]: event.target.value });
-  // };
-
   private generateGuidsAndSetState() {
     let guids = this.generateGuids();
     this.setState({
@@ -95,24 +82,27 @@ const useStyles = makeStyles({
     });
   }
 
-
-//   private handleChange(event: React.FormEvent<HTMLSelectElement>) {
-//     // No longer need to cast to any - hooray for react!
-//     var safeSearchTypeValue: string = event.currentTarget.value;
-
-//     console.log(safeSearchTypeValue); // in chrome => B
-
-//     // this.setState({
-//     //     selectedValue: safeSearchTypeValue
-//     // });
-// }
-
   private generateOneGuid():string{
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
+
+ handleSliderChange = (event: any, newValue: number | number[]) => {
+  const value = newValue as number;
+  this.setState({
+    count: value
+  });
+  this.generateGuids();
+  };
+
+ handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  this.setState({
+    count: Number(event.target.value)
+  });
+  this.generateGuids();
+  };
 
   onChange = (e: React.ChangeEvent<HTMLInputElement>)=> {
     this.setState({
@@ -129,23 +119,39 @@ const useStyles = makeStyles({
                   />
                 </ListItem>
       );
-    // const classes = useStyles();
     return <div>
-    
-        <FormControl >
-        <Input
-          id="adornment-weight"
-          value={this.state.count}
-          onChange={this.onChange.bind(this)}
-          // onChange={(e, sender) => this.onChange(e, sender)}
-          endAdornment={<InputAdornment position="end">guids</InputAdornment>}
-          aria-describedby="weight-helper-text"
-          inputProps={{
-            'aria-label': 'weight',
-          }}
-        />
-        <FormHelperText id="weight-helper-text">Number of guids</FormHelperText>
-      </FormControl>
+    <Typography id="input-slider" gutterBottom>
+        How many do you want?
+      </Typography>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <ImportExport />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            value={typeof this.state.count === 'number' ? this.state.count : 0}
+            max={20}
+            min={1}
+             onChange={this.handleSliderChange}
+            aria-labelledby="input-slider"
+          />
+        </Grid>
+        <Grid item>
+          <Input
+            value={this.state.count}
+            margin="dense"
+            onChange={this.handleInputChange}
+            // onBlur={this.handleBlur}
+            inputProps={{
+              step: 1,
+              min: 1,
+              max: 20,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
         <Button onClick={() => { this.generateGuidsAndSetState(); }} variant="outlined" color="primary">Create</Button>
 
         <List>
@@ -154,41 +160,4 @@ const useStyles = makeStyles({
     </div>
     
   }
-
-//   onChange = (e: React.FormEvent<HTMLInputElement>) => {
-//     const newValue = e.currentTarget.value;
-// }
-  //  handleChange(): ((event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void) | undefined {
-  //    console.log("foo");
-  //  }
-
 }
-
-// const GuidGenerator: React.FunctionComponent<{ title: string }> = ({
- 
-  
-
-//   children,
-//   title
-// }) => (
-//   <div>
-//           <div title={title}>{children} CHILDREN</div>;
-//            <code>{this.state.guids }</code>
-//           <FormControl >
-//           <Input
-//             id="adornment-weight"
-//             // value={this.state.count}
-//             // onChange={this.handleChange('weight')}
-//             // endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
-//             aria-describedby="weight-helper-text"
-//             inputProps={{
-//               'aria-label': 'weight',
-//             }}
-//           />
-//           <FormHelperText id="weight-helper-text">Weight</FormHelperText>
-//         </FormControl>
-//           {/* <Button onClick={() => { this.generateGuidsAndSetState(10); }} variant="outlined" color="primary">Create</Button> */}
-//       </div>
-//   );
-
-// export default GuidGenerator;
