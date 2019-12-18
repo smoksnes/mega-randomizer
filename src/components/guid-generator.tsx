@@ -13,6 +13,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import ImportExport from '@material-ui/icons/ImportExport';
+import IWriter from '../interfaces/writer';
+
 // import Visibility from '@material-ui/icons/Visibility';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -45,7 +47,10 @@ const useStyles = makeStyles({
 // and state. Since we don't have props, we pass an empty object.
 // function GuidGenerator(props) {
 
- export default class GuidGenerator extends Component<{},GuidGeneratorState> {
+ export default class GuidGenerator extends Component<{},GuidGeneratorState> implements IWriter {
+   write(): String {
+     return 'foo'
+   }
   // classes: Readonly<{}>;
   
   constructor(props: Readonly<{}>){

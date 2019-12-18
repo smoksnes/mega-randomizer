@@ -4,14 +4,13 @@ import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import { Bar } from './pages';
 import { GuidComponent } from './components/guid-component';
 import { Card, CardContent, Typography, CardActions, Button } from '@material-ui/core';
-import { HomeComponent } from './components/home-component';
+import HomeComponent from './components/home-component';
+
 
 const App: React.FC = () => {
   return (
     <Router>
     <div>
-
-      
       <nav>
         <Link to="/">Home</Link>
         {/* <Link to="/guid">Guids</Link>
