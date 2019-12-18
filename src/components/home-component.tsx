@@ -2,43 +2,44 @@ import React, { FunctionComponent, useState, ReactElement, Component } from 'rea
 import { Card, CardContent, Typography, CardActions, Button, makeStyles, createStyles, Theme, Grid, Paper } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import RenderOutputComponent from './render-output-component';
-import { GuidComponent } from './guid-component';
-import GuidGenerator from './guid-generator';
 import IWriter from '../interfaces/writer';
 import GuidWriter from '../writers/guid-writer';
 import EmptyWriter from '../writers/empty-writer';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      // height: 140,
-      // width: 100,
-    },
-    control: {
-      padding: theme.spacing(2),
-    },
-  }),
-);
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     root: {
+//       flexGrow: 1,
+//     },
+//     paper: {
+//       // height: 140,
+//       // width: 100,
+//     },
+//     control: {
+//       padding: theme.spacing(2),
+//     },
+//   }),
+// );
 
 type HomeComponentState = {
-  currentWriter:IWriter,
-  count:number
+  currentWriter: IWriter | null,
+  isSet:Boolean
 };
 
 
 
 export default class HomeComponent extends Component<{},HomeComponentState> {
   static defaultProps = {
-    currentWriter: new EmptyWriter()
+    currentWriter: new EmptyWriter(),
+    isSet: false
   }
+
+  childRef = React.createRef<RenderOutputComponent>();
 
     // Before the component mounts, we initialise our state
     componentWillMount() {
       this.setState({
-        currentWriter: new EmptyWriter()
+        currentWriter: null
       });
     }
 
@@ -51,14 +52,14 @@ changeComponent(comp : IWriter){
   this.setState({
     currentWriter: comp
   });
-}
+  if (!this.childRef.current) {
+    return;
+  }
 
-setGuid(){
-  this.changeComponent(new GuidWriter());
-}
+  // this.childRef.current.write();
+};
 
 render(){
-
   return (
     <div>
       <Grid container spacing={3}>
@@ -80,7 +81,7 @@ render(){
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => this.setGuid()}>Do</Button>
+              <Button size="small" onClick={() => this.changeComponent(new GuidWriter())}>Create</Button>
               <Button size="small"><Link to="/guid">Advanced</Link></Button>
               {/* <Button size="small"><Link to="/guid">Create one</Link></Button> */}
             </CardActions>
@@ -107,7 +108,7 @@ render(){
       </Grid>
       <Grid container>
         <Grid item xs={12}>
-            <RenderOutputComponent writer={this.state.currentWriter}/>
+            <RenderOutputComponent ref={this.childRef} writer={this.state.currentWriter}/>
           </Grid>
       </Grid>
     </div>
