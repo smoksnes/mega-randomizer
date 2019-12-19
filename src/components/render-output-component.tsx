@@ -1,5 +1,5 @@
 import React, { Component } from 'react'; // importing FunctionComponent
-import { Paper, Theme, Button, ListItem, ListItemText, List, Slider, Input } from '@material-ui/core';
+import { Paper, Button, ListItem, ListItemText, List, Slider, Input, withStyles } from '@material-ui/core';
 import IWriter from '../interfaces/writer';
 
 // const useStyles = makeStyles((theme: Theme) =>
@@ -31,16 +31,31 @@ import IWriter from '../interfaces/writer';
 //     </Paper>
 //   );
 // }
+
+const styles = {
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    // height: 48,
+    padding: '0 30px',
+    bottom: 0,
+  },
+};
+
 type RenderOutputComponentState = {
   output: Array<String>,
   count: Number
 };
 
 type RenderOutputProps = {
-  writer:IWriter | null
+  writer:IWriter | null,
+  classes: any,
 };
 
- export default class RenderOutputComponent extends Component<RenderOutputProps,RenderOutputComponentState>  {
+ class RenderOutputComponent extends Component<RenderOutputProps,RenderOutputComponentState>  {
   state = {
     output: new Array<String>(),
     count: 1
@@ -81,7 +96,7 @@ handleSliderChange = (event: any, newValue: number | number[]) => {
     if(this.props.writer == null)
       return;
     const count = this.state.count;
-    let list: Array<String> = new Array();
+    let list: String[] = new Array(count);
     for(var i=0; i< count; i++){
       var output = this.props.writer.write();
       list[i] = output;
@@ -93,6 +108,8 @@ handleSliderChange = (event: any, newValue: number | number[]) => {
   }
   
   render() {
+    const { classes } = this.props;
+
     if(this.props.writer == null){
       return (
         <div>Välj något...</div>
@@ -107,7 +124,7 @@ handleSliderChange = (event: any, newValue: number | number[]) => {
     </ListItem>
 );
     return (
-    <Paper >
+    <Paper className={classes.root}>
                 <List>
               {items}
             </List>  
@@ -143,3 +160,4 @@ handleSliderChange = (event: any, newValue: number | number[]) => {
   }
  }
 
+ export default withStyles(styles)(RenderOutputComponent);
